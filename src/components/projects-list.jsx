@@ -1,8 +1,9 @@
-export default function ProjectsList({
-  projectsList,
-  currentProject,
-  openProject,
-}) {
+import { useContext } from "react";
+import { ProjectsContext } from "../store/project-context";
+
+export default function ProjectsList({ openProject }) {
+  const { projectsList, currentProject } = useContext(ProjectsContext);
+
   function handleClick(name) {
     openProject(name);
   }

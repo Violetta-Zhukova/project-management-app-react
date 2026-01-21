@@ -3,6 +3,7 @@ import Sidebar from "./components/sidebar";
 import { useState, useRef } from "react";
 import DefaultSection from "./components/default-section";
 import AddProjectForm from "./components/add-project-form";
+import { ProjectsContext } from "./store/project-context";
 
 function App() {
   const [mainSectionState, setMainSectionState] = useState("default");
@@ -34,6 +35,14 @@ function App() {
     setCurrentProject(null);
   }
 
+  function deleteProject() {
+    setProjectsList((prevList) =>
+      prevList.filter((value) => value.name !== currentProject.name),
+    );
+    setMainSectionState("default");
+    setCurrentProject(null);
+  }
+
   function openForm() {
     setMainSectionState("form");
   }
@@ -44,18 +53,10 @@ function App() {
 
   function openProject(name) {
     const currentProject = projectsList.find(
-      (project) => project.name === name
+      (project) => project.name === name,
     );
     setCurrentProject(currentProject);
     setMainSectionState("project");
-  }
-
-  function deleteProject() {
-    setProjectsList((prevList) =>
-      prevList.filter((value) => value.name !== currentProject.name)
-    );
-    setMainSectionState("default");
-    setCurrentProject(null);
   }
 
   function addTask(taskText) {
@@ -69,7 +70,7 @@ function App() {
       });
 
       const updatedProject = updatedList.find(
-        (proj) => proj.name === currentProject.name
+        (proj) => proj.name === currentProject.name,
       );
       setCurrentProject(updatedProject);
       return updatedList;
@@ -88,7 +89,7 @@ function App() {
       });
 
       const updatedProject = updatedList.find(
-        (proj) => proj.name === currentProject.name
+        (proj) => proj.name === currentProject.name,
       );
       setCurrentProject(updatedProject);
       return updatedList;
@@ -121,15 +122,14 @@ function App() {
   }
 
   return (
-    <main className="flex gap-8 h-screen  pt-16 bg-white w-full">
-      <Sidebar
-        openForm={openForm}
-        projectsList={projectsList}
-        openProject={openProject}
-        currentProject={currentProject}
-      />
-      {content}
-    </main>
+    <ProjectsContext
+      value={{ projectsList: projectsList, currentProject: currentProject }}
+    >
+      <main className="flex gap-8 h-screen  pt-16 bg-white w-full">
+        <Sidebar openForm={openForm} openProject={openProject} />
+        {content}
+      </main>
+    </ProjectsContext>
   );
 }
 

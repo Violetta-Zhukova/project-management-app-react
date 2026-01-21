@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import Button from "./button";
 import Modal from "./modal";
 
